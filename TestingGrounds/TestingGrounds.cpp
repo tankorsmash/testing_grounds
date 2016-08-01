@@ -116,7 +116,7 @@ std::string _humanize_number(long double value)
     return str + suffix;
 }
 
-std::string beautify_double(long double& value)
+std::string beautify_double(const long double& value)
 {
     bool is_negative = value < 0;
     std::string decimal = "";
