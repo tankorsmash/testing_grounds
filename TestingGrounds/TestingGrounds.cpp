@@ -157,7 +157,7 @@ std::string beautify_double(long double& value)
     return output;
 }
 
-std::string test_double(long double input)
+std::string test_double(long double& input)
 {
     auto s = beautify_double(input);
     CCLOG("%f -> %s\n", input, s.c_str());
@@ -168,23 +168,36 @@ std::string test_double(long double input)
 void test_beautify_double()
 {
     CCLOG("first should be 1, 10, 100\n");
-    test_double(1.0f);
-    test_double(10.0f);
-    test_double(100.0f);
-    test_double(1000.0f);
-    test_double(10000.0f);
-    test_double(100000.0f);
-    test_double(1000000.0f);
+    for (long double val : {
+            1.0f,
+            10.0f,
+            100.0f,
+            1000.0f,
+            10000.0f,
+            100000.0f,
+            1000000.0f
+            }){
+        test_double(val);
+    };
 
     CCLOG("\nfloats, first should be like 5.55f\n");
-    test_double(5.55f);
-    test_double(5.777f);
-    test_double(1234.5678f);
+    for (long double val : {
+            5.55f,
+            5.777f,
+            1234.5678f,
+            }){
+        test_double(val);
+    }
+
     CCLOG("\na bunch of millions, first should be 1.222b\n");
-    test_double(1222333444.0f);
-    test_double(523411111111.0f);
-    test_double(12312317653411111111.0f);
-    test_double(-123.04f);
+    for (long double val : {
+            1222333444.0f,
+            523411111111.0f,
+            12312317653411111111.0f,
+            -123.04f
+            }){
+        test_double(val);
+    };
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -193,7 +206,7 @@ int _tmain(int argc, _TCHAR* argv[])
     std::vector<std::pair<std::chrono::time_point<std::chrono::system_clock>, std::chrono::time_point<std::chrono::system_clock>>> history;
     std::chrono::time_point<std::chrono::system_clock> start, end;
 
-    for (int i = 0; i < 250; i++)
+    for (int i = 0; i < 500; i++)
     {
         start = std::chrono::system_clock::now();
         test_beautify_double();
