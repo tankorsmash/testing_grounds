@@ -1,6 +1,6 @@
 ## Optimizations
 
-`beautify_double()` takes a double, like 123,456,000 and returns 123.456m. This
+[`beautify_double()`](https://github.com/tankorsmash/testing_grounds/blob/master/TestingGrounds/TestingGrounds.cpp#L119) takes a double, like 123,456,000 and returns 123.456m. This
 needs to get as optimized as possible. It's got a baseline of 0.002s (2ms) average
 across 500 iterations. I'd like to get it to 0.00002s (0.02ms) or better.
 
