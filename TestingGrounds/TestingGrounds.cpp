@@ -9,8 +9,10 @@
 #include <iomanip>
 
 #include <chrono>
+#include <iostream>
+#include <algorithm>
 
-#define CCLOG(format, ...) printf(format, ##__VA_ARGS__)
+#define CCLOG(format, ...) ; //printf(format, ##__VA_ARGS__)
 
 std::vector<std::string>& split(const std::string &s, char delim, std::vector<std::string> &elems) {
     std::stringstream ss(s);
@@ -155,11 +157,10 @@ std::string beautify_double(long double& value)
     return output;
 }
 
-std::string test_double(float input)
+std::string test_double(long double input)
 {
-    long double dbl_input = (long double)input;
-    auto s = beautify_double(dbl_input);
-    CCLOG("%f -> %s\n", dbl_input, s.c_str());
+    auto s = beautify_double(input);
+    CCLOG("%f -> %s\n", input, s.c_str());
 
     return s;
 }
@@ -188,8 +189,38 @@ void test_beautify_double()
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-    test_beautify_double();
+
+    std::vector<std::pair<std::chrono::time_point<std::chrono::system_clock>, std::chrono::time_point<std::chrono::system_clock>>> history;
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+
+    for (int i = 0; i < 250; i++)
+    {
+        start = std::chrono::system_clock::now();
+        test_beautify_double();
+        end = std::chrono::system_clock::now();
+
+        history.push_back({ start, end });
+    }
+
+    //print output
+    std::vector<double> count_history = {};
+    double total = 0;
+    for (auto pair : history)
+    {
+        std::chrono::duration<double> elapsed_seconds = pair.second - pair.first;
+        total += elapsed_seconds.count();
+        count_history.push_back(elapsed_seconds.count());
+    }
+ 
+    std::stringstream ss;
+    ss << "avg elapsed time: " << total / history.size() << "s\n";
+    ss << "min elapsed time: " << *std::min_element(count_history.begin(), count_history.end()) << "s\n";
+    ss << "max elapsed time: " << *std::max_element(count_history.begin(), count_history.end()) << "s\n";
+
+    std::cout << ss.str();
+
+    //CCLOG(ss.str().c_str());
     getchar();
-	return 0;
+    return 0;
 }
 
